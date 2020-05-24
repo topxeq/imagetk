@@ -3,11 +3,14 @@ package imagetk
 import (
 	"bytes"
 	"fmt"
-	// "github.com/topxeq/tk"
+	"github.com/topxeq/tk"
 	"gonum.org/v1/plot"
-	"image"
-	// "image/color"
+	"gonum.org/v1/plot/plotter"
 	"gonum.org/v1/plot/vg"
+	"image"
+	"image/color"
+	"image/draw"
+	"image/png"
 	"strings"
 )
 
@@ -23,6 +26,79 @@ func NewImageTK() *ImageTK {
 
 func (p *ImageTK) GetVersion() string {
 	return p.Version
+}
+
+func (p *ImageTK) NewRGBA(r, g, b, a uint8) color.RGBA {
+	return color.RGBA{r, g, b, a}
+}
+
+func (p *ImageTK) NewNRGBAFromHex(strA string) color.NRGBA {
+	r, g, b, a := tk.ParseHexColor(strA)
+
+	return color.NRGBA{uint8(r), uint8(g), uint8(b), uint8(a)}
+}
+
+func (p *ImageTK) NewRGBAFromHex(strA string) color.RGBA {
+	r, g, b, a := tk.ParseHexColor(strA)
+
+	return color.RGBA{uint8(r), uint8(g), uint8(b), uint8(a)}
+}
+
+func (p *ImageTK) LoadRGBAFromImage(imageA image.Image) (*image.RGBA, error) {
+	switch imageT := imageA.(type) {
+	case *image.RGBA:
+		return imageT, nil
+	default:
+		rgba := image.NewRGBA(imageT.Bounds())
+		draw.Draw(rgba, imageT.Bounds(), imageT, image.Pt(0, 0), draw.Src)
+		return rgba, nil
+	}
+
+}
+
+func (p *ImageTK) LoadPlotImage(plt *plot.Plot, w vg.Length, h vg.Length) (*image.RGBA, error) {
+
+	var bufT bytes.Buffer
+
+	writerT, errT := plt.WriterTo(w, h, "png")
+
+	if errT != nil {
+		return nil, errT
+	}
+
+	_, errT = writerT.WriteTo(&bufT)
+
+	if errT != nil {
+		return nil, errT
+	}
+
+	readerT := bytes.NewReader(bufT.Bytes())
+
+	// defer readerT.Close()
+
+	// imgFile, err := os.Open(imgPath)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// defer imgFile.Close()
+
+	img, err := png.Decode(readerT)
+	if err != nil {
+		return nil, err
+	}
+
+	switch trueImg := img.(type) {
+	case *image.RGBA:
+		return trueImg, nil
+	default:
+		rgba := image.NewRGBA(trueImg.Bounds())
+		draw.Draw(rgba, trueImg.Bounds(), trueImg, image.Pt(0, 0), draw.Src)
+		return rgba, nil
+	}
+}
+
+func (p *ImageTK) NewPlotXY(xA, yA float64) plotter.XY {
+	return plotter.XY{X: xA, Y: yA}
 }
 
 // ParseHexColor inspired by gg
