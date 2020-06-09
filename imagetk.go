@@ -215,8 +215,8 @@ func (p *ImageTK) GetImageFileContent(fileNameA string, imageTypeA ...string) im
 	return img
 }
 
-func (p *ImageTK) GetImageFileContentAndThumb(fileNameA string, maxWidthA uint, maxHeightA uint) image.Image {
-	img := p.GetImageFileContent(fileNameA)
+func (p *ImageTK) GetImageFileContentAndThumb(fileNameA string, maxWidthA uint, maxHeightA uint, imageTypeA ...string) image.Image {
+	img := p.GetImageFileContent(fileNameA, imageTypeA...)
 	if img == nil {
 		return nil
 	}
