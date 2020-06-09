@@ -183,7 +183,7 @@ func (p *ImageTK) SaveImageAs(imageA image.Image, filePathA string, formatA stri
 
 }
 
-func (p *ImageTK) GetImageFileContent(fileNameA string, imageTypeA ...string) image.Image {
+func (p *ImageTK) GetImageFileContent(fileNameA string, imageTypeA string) image.Image {
 	file, err := os.Open(fileNameA)
 	if err != nil {
 		return nil
@@ -192,16 +192,16 @@ func (p *ImageTK) GetImageFileContent(fileNameA string, imageTypeA ...string) im
 	fileExt := strings.ToLower(filepath.Ext(fileNameA))
 	var img image.Image
 
-	if imageTypeA != nil && len(imageTypeA) > 0 {
-		fileExt = imageTypeA[0]
+	if imageTypeA != "" {
+		fileExt = imageTypeA
 	}
 
 	switch fileExt {
-	case ".jpg", ".jpeg", "":
+	case ".jpg", ".jpeg", "jpg", "jpeg":
 		img, err = jpeg.Decode(file)
-	case ".png":
+	case ".png", "png":
 		img, err = png.Decode(file)
-	case ".gif":
+	case ".gif", "gif":
 		img, err = gif.Decode(file)
 	default:
 		img, err = jpeg.Decode(file)
@@ -215,8 +215,8 @@ func (p *ImageTK) GetImageFileContent(fileNameA string, imageTypeA ...string) im
 	return img
 }
 
-func (p *ImageTK) GetImageFileContentAndThumb(fileNameA string, maxWidthA uint, maxHeightA uint, imageTypeA ...string) image.Image {
-	img := p.GetImageFileContent(fileNameA, imageTypeA...)
+func (p *ImageTK) GetImageFileContentAndThumb(fileNameA string, maxWidthA uint, maxHeightA uint, imageTypeA string) image.Image {
+	img := p.GetImageFileContent(fileNameA, imageTypeA)
 	if img == nil {
 		return nil
 	}
