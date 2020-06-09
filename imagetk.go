@@ -196,6 +196,8 @@ func (p *ImageTK) GetImageFileContent(fileNameA string, imageTypeA string) image
 		fileExt = imageTypeA
 	}
 
+	// tk.Pl("fileExt: %v", fileExt)
+
 	switch fileExt {
 	case ".jpg", ".jpeg", "jpg", "jpeg":
 		img, err = jpeg.Decode(file)
@@ -208,6 +210,7 @@ func (p *ImageTK) GetImageFileContent(fileNameA string, imageTypeA string) image
 	}
 
 	if err != nil {
+		// tk.Pl("err: %v", err)
 		return nil
 	}
 	defer file.Close()
