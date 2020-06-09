@@ -183,7 +183,7 @@ func (p *ImageTK) SaveImageAs(imageA image.Image, filePathA string, formatA stri
 
 }
 
-func (p *ImageTK) GetImageFileContent(fileNameA string) image.Image {
+func (p *ImageTK) GetImageFileContent(fileNameA string, imageTypeA ...string) image.Image {
 	file, err := os.Open(fileNameA)
 	if err != nil {
 		return nil
@@ -191,6 +191,10 @@ func (p *ImageTK) GetImageFileContent(fileNameA string) image.Image {
 
 	fileExt := strings.ToLower(filepath.Ext(fileNameA))
 	var img image.Image
+
+	if imageTypeA != nil && len(imageTypeA) > 0 {
+		fileExt = imageTypeA[0]
+	}
 
 	switch fileExt {
 	case ".jpg", ".jpeg", "":
