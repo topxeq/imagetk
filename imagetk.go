@@ -40,16 +40,32 @@ func (p *ImageTK) NewRGBA(r, g, b, a uint8) color.RGBA {
 	return color.RGBA{r, g, b, a}
 }
 
+func (p *ImageTK) NewRGBAP(r, g, b, a uint8) *color.RGBA {
+	return &color.RGBA{r, g, b, a}
+}
+
 func (p *ImageTK) NewNRGBAFromHex(strA string) color.NRGBA {
 	r, g, b, a := tk.ParseHexColor(strA)
 
 	return color.NRGBA{uint8(r), uint8(g), uint8(b), uint8(a)}
 }
 
+func (p *ImageTK) NewNRGBAPFromHex(strA string) *color.NRGBA {
+	r, g, b, a := tk.ParseHexColor(strA)
+
+	return &color.NRGBA{uint8(r), uint8(g), uint8(b), uint8(a)}
+}
+
 func (p *ImageTK) NewRGBAFromHex(strA string) color.RGBA {
 	r, g, b, a := tk.ParseHexColor(strA)
 
 	return color.RGBA{uint8(r), uint8(g), uint8(b), uint8(a)}
+}
+
+func (p *ImageTK) NewRGBAPFromHex(strA string) *color.RGBA {
+	r, g, b, a := tk.ParseHexColor(strA)
+
+	return &color.RGBA{uint8(r), uint8(g), uint8(b), uint8(a)}
 }
 
 func (p *ImageTK) LoadRGBAFromImage(imageA image.Image) (*image.RGBA, error) {
