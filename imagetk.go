@@ -16,7 +16,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/topxeq/tk"
+	tk "github.com/topxeq/tkc"
 	"gonum.org/v1/plot"
 	"gonum.org/v1/plot/plotter"
 	"gonum.org/v1/plot/vg"
